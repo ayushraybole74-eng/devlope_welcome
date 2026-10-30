@@ -1,0 +1,29 @@
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:#eef2ff;font-family:Arial,sans-serif;display:flex;min-height:100vh}
+aside{width:230px;background:#111a30;padding:28px 20px;flex-shrink:0}
+aside h2{color:#65e6ff}
+aside small,header small{color:#8292b5;letter-spacing:2px}
+aside p{padding:13px;border-radius:9px;color:#aab8d4}
+aside .active{background:#243653;color:white}
+main{padding:35px;width:100%;max-width:1300px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;gap:15px}
+h1{margin:10px 0}
+header p,.tip{color:#9aa9c5}
+.panel{background:#141f36;border:1px solid #283955;border-radius:15px;padding:22px;margin-bottom:20px}
+.grid{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+label{display:block;color:#aebbd3;margin:15px 0;font-size:14px}
+input:not([type=checkbox]),textarea,select{display:block;width:100%;margin-top:8px;background:#0b1428;color:white;border:1px solid #344765;border-radius:8px;padding:12px;font:inherit}
+input[type=color]{height:42px}
+button{background:#19bfe5;color:#06121d;border:0;border-radius:8px;padding:12px 18px;font-weight:bold;cursor:pointer}
+.row{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.row label{flex:1}
+.toggle{display:flex;align-items:center;gap:8px}
+.discord{background:#202b40;padding:18px;border-radius:12px}
+.discord article{background:#111a2c;border-left:4px solid #00ffff;padding:16px;margin-top:12px;border-radius:5px}
+.discord article p{color:#d4dbea}
+.discord article small{color:#9aa9c5}
+.discord img{width:100%;margin:12px 0;border-radius:8px}
+.hide{display:none!important}
+#status{color:#aab8d4}
+footer{text-align:center;color:#71809e;padding:25px}
+@media(max-width:800px){body{display:block}aside{width:100%}main{padding:18px}.grid{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}}
