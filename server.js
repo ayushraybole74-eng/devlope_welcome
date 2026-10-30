@@ -1,5 +1,6 @@
 const express=require("express"),session=require("express-session"),crypto=require("crypto"),fs=require("fs"),path=require("path");
 const app=express(),PORT=process.env.PORT||3000,DB=path.join(__dirname,"data.json");
+app.set("trust proxy", 1);
 app.use(express.json({limit:"50kb"}));
 app.use(session({name:"ays.sid",secret:process.env.SESSION_SECRET||"change-me",resave:false,saveUninitialized:false,cookie:{httpOnly:true,sameSite:"lax",secure:process.env.NODE_ENV==="production",maxAge:28800000}}));
 app.use(express.static(path.join(__dirname,"public")));
