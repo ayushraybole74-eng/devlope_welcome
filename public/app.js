@@ -1,3 +1,4 @@
+
 const $ = id => document.getElementById(id);
 
 let guilds = [];
@@ -6,37 +7,75 @@ function preview() {
   $("pt").textContent = $("title").value || "Welcome to AYS+ARP";
   $("pd").textContent = $("description").value || "Thanks for joining our server!";
   $("pf").textContent = $("footer").value || "Welcome to the community!";
+
   $("embed").style.borderLeftColor = $("color").value;
-  $("pi").src = $("imageUrl").value;
-  $("pi").classList.toggle("hide", !$("imageUrl").value);
+
+  const imageUrl = $("imageUrl").value.trim();
+
+  if (imageUrl) {
+    $("pi").src = imageUrl;
+    $("pi").classList.remove("hide");
+  } else {
+    $("pi").removeAttribute("src");
+    $("pi").classList.add("hide");
+  }
 }
 
-["title","description","footer","color","imageUrl"].forEach(id =>
-  $(id).addEventListener("input", preview)
-);
+[
+  "title",
+  "description",
+  "footer",
+  "color",
+  "imageUrl"
+].forEach(id => {
+  $(id).addEventListener("input", preview);
+});
 
 async function api(url, options = {}) {
   const res = await fetch(url, {
+    ...options,
     credentials: "include",
-    headers: {"Content-Type":"application/json", ...(options.headers || {})},
-    ...options
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    }
   });
-  if (!res.ok) throw new Error(await res.text());
+
+  if (!res.ok) {
+    throw new Error(await res.text());
+  }
+
   return res.json();
 }
 
 async function loadConfig() {
   const id = $("guild").value;
   if (!id) return;
+
   try {
-    const c = await api("/api/config/" + id);
-    ["title","description","footer","color","imageUrl",
-     "welcomeChannelId","rulesChannelId","chatChannelId","updatesChannelId"]
-      .forEach(k => { if (c[k] !== undefined) $(k).value = c[k]; });
+    const c = await api("/api/config/" + encodeURIComponent(id));
+
+    [
+      "title",
+      "description",
+      "footer",
+      "color",
+      "imageUrl",
+      "welcomeChannelId",
+      "rulesChannelId",
+      "chatChannelId",
+      "updatesChannelId"
+    ].forEach(key => {
+      if (c[key] !== undefined) {
+        $(key).value = c[key];
+      }
+    });
+
     $("enabled").checked = c.enabled !== false;
+
     preview();
     $("status").textContent = "Settings loaded";
-  } catch(e) {
+  } catch (error) {
     $("status").textContent = "Could not load settings";
   }
 }
@@ -44,46 +83,82 @@ async function loadConfig() {
 async function start() {
   try {
     const me = await api("/api/me");
+
     $("user").textContent = me.username || "Signed in";
     $("login").textContent = "Connected";
+
     guilds = me.guilds || [];
-    $("guild").innerHTML = guilds.map(g =>
-      `<option value="${g.id}">${g.name}</option>`
-    ).join("");
-    if (guilds.length) {
+
+    const select = $("guild");
+    select.replaceChildren();
+
+    guilds.forEach(guild => {
+      const option = document.createElement("option");
+      option.value = guild.id;
+      option.textContent = guild.name;
+      select.appendChild(option);
+    });
+
+    if (guilds.length > 0) {
       $("editor").classList.remove("hide");
       $("notice").classList.add("hide");
       await loadConfig();
     } else {
-      $("notice").textContent = "No servers with Manage Server permission found.";
+      $("notice").textContent =
+        "No servers with Manage Server permission found.";
     }
-  } catch(e) {
-    $("notice").textContent = "Please login with Discord to use the dashboard.";
+
+  } catch (error) {
+    $("notice").textContent =
+      "Please login with Discord to use the dashboard.";
   }
 }
 
-$("login").onclick = () => location.href = "/auth/discord";
-$("guild").onchange = loadConfig;
+$("login").addEventListener("click", () => {
+  window.location.href = "/auth/discord";
+});
 
-$("save").onclick = async () => {
+$("guild").addEventListener("change", loadConfig);
+
+$("save").addEventListener("click", async () => {
   const id = $("guild").value;
   if (!id) return;
+
   const config = {};
-  ["title","description","footer","color","imageUrl",
-  "welcomeChannelId","rulesChannelId","chatChannelId","updatesChannelId"]
-    .forEach(k => config[k] = $(k).value);
+
+  [
+    "title",
+    "description",
+    "footer",
+    "color",
+    "imageUrl",
+    "welcomeChannelId",
+    "rulesChannelId",
+    "chatChannelId",
+    "updatesChannelId"
+  ].forEach(key => {
+    config[key] = $(key).value;
+  });
+
   config.enabled = $("enabled").checked;
+
+  $("status").textContent = "Saving...";
+
   try {
-    await api("/api/config/" + id, {
-      method:"PUT",
-      body:JSON.stringify(config)
-    });
+    await api(
+      "/api/config/" + encodeURIComponent(id),
+      {
+        method: "PUT",
+        body: JSON.stringify(config)
+      }
+    );
+
     $("status").textContent = "Saved successfully!";
-  } catch(e) {
-    $("status").textContent = "Save failed: " + e.message;
+
+  } catch (error) {
+    $("status").textContent = "Save failed";
   }
-};
+});
 
 preview();
 start();
-        
