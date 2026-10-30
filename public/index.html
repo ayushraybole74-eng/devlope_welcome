@@ -1,0 +1,72 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AYS+ARP Welcome Dashboard</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<aside>
+<h2>✦ AYS+ARP</h2>
+<small>BOT CONTROL PANEL</small>
+<p class="active">Welcome message</p>
+<p id="user">Not signed in</p>
+</aside>
+<main>
+<header>
+<div>
+<small>AYS+ARP / CONFIGURATION</small>
+<h1>Welcome settings</h1>
+<p>Customize your server's welcome message.</p>
+</div>
+<button id="login">Login with Discord</button>
+</header>
+<section id="notice" class="panel">Sign in with Discord. You will see servers where you have Manage Server or Administrator permission.</section>
+<section id="editor" class="grid hide">
+<div class="panel">
+<div class="row">
+<h3>Message builder</h3>
+<label class="toggle"><input id="enabled" type="checkbox" checked> Enabled</label>
+</div>
+<label>Server<select id="guild"></select></label>
+<label>Title<input id="title"></label>
+<label>Description<textarea id="description" rows="4"></textarea></label>
+<div class="row">
+<label>Embed colour<input id="color" type="color" value="#00ffff"></label>
+<label>Footer<input id="footer"></label>
+</div>
+<label>Welcome image URL<input id="imageUrl" type="url" placeholder="https://..."></label>
+<h3>Channel IDs</h3>
+<label>Welcome channel<input id="welcomeChannelId"></label>
+<div class="row">
+<label>Rules channel<input id="rulesChannelId"></label>
+<label>Chat channel<input id="chatChannelId"></label>
+</div>
+<label>Updates channel<input id="updatesChannelId"></label>
+<div class="row">
+<span id="status">Not saved</span>
+<button id="save">Save changes</button>
+</div>
+</div>
+<div class="panel">
+<h3>Live preview</h3>
+<div class="discord">
+<small>AYS+ARP</small>
+<article id="embed">
+<b id="pt">Welcome to AYS+ARP</b>
+<p id="pd">Thanks for joining our server!</p>
+<img id="pi" class="hide">
+<small id="pf">Welcome to the community!</small>
+</article>
+</div>
+<p class="tip">Settings are stored on this dashboard. Connect your BDFD command to the config endpoint to use them in Discord.</p>
+</div>
+</section>
+<footer>AYS+ARP • Community dashboard</footer>
+</main>
+<script src="/app.js"></script>
+</body>
+                        </html>
+                        
